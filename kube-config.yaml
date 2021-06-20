@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jwt-resource-deployment
+  labels:
+    app: jwt-resource
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jwt-resource
+  template:
+    metadata:
+      labels:
+        app: jwt-resource
+    spec:
+      containers:
+      - name: jwt-resource
+        image: skullgnammer/jwt-resource:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "400M"
+          limits:
+            cpu: "1"
+            memory: "700M"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jwt-resource-service
+spec:
+  selector:
+    app: jwt-resource
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
